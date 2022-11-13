@@ -1,25 +1,42 @@
 import { Key, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { Button, Card, Col, Container, Dropdown, Grid, Input, Row, Spacer, Switch, Text } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Container,
+  Dropdown,
+  Grid,
+  Input,
+  Row,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 import React from "react";
+import {
+  Error,
+  Method,
+  Methods,
+  Protocol,
+  Response,
+} from "../models";
 
 function App() {
-  const [selectedMethod, setSelected] = React.useState(new Set<Key>(["GET"]) || "all");
+  const [selectedMethod, setSelected] = React.useState(new Set<Key>([Methods[0].name]) || "all");
   const method = React.useMemo(
     () => Array.from(selectedMethod).join(", ").replaceAll("_", " "),
     [selectedMethod]
   );
-  const [protocol, _] = useState("http://");
+  const [protocol, _] = useState(Protocol.http);
   const [url, setUrl] = useState("");
-  const [response, setResponse] = useState("");
+  const [text, setText] = useState("");
 
   async function send() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     try {
-      const resp = await invoke("send", { method: method, url: `${protocol}${url}` });
-      setResponse(JSON.stringify(resp));
-    } catch (e) {
-      setResponse(JSON.stringify(e));
+      const resp = await invoke<Response>("send", { method: method, url: `${protocol}${url}` });
+      setText(resp.body);
+    } catch (error) {
+      setText((error as Error).message);
     }
   }
 
@@ -31,7 +48,10 @@ function App() {
           <Grid.Container gap={1} justify="flex-start">
             <Grid>
               <Dropdown>
-                <Dropdown.Button shadow css={{ tt: "capitalize" }}>
+                <Dropdown.Button
+                  color="secondary"
+                  shadow
+                  css={{ tt: "capitalize" }}>
                   {method}
                 </Dropdown.Button>
                 <Dropdown.Menu
@@ -40,9 +60,15 @@ function App() {
                   selectionMode="single"
                   selectedKeys={selectedMethod}
                   onSelectionChange={setSelected}
+                  items={Methods}
                 >
-                  <Dropdown.Item key="GET">GET</Dropdown.Item>
-                  <Dropdown.Item key="POST">POST</Dropdown.Item>
+                  {(item: Method) => (
+                    <Dropdown.Item
+                      key={item.name}
+                    >
+                      {item.name}
+                    </Dropdown.Item>
+                  )}
                 </Dropdown.Menu>
               </Dropdown>
             </Grid>
@@ -68,11 +94,11 @@ function App() {
         </Row>
         <Spacer />
         <Row>
-          <Card css={{ $$cardColor: '$colors$secondary' }}>
+          <Card>
             <Card.Body>
               <Row justify="center" align="center">
-                <Text h6 size={15} color="white" css={{ m: 0 }}>
-                  {response}
+                <Text size={15} css={{ m: 0 }}>
+                  {text}
                 </Text>
               </Row>
             </Card.Body>
