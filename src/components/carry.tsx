@@ -9,12 +9,12 @@ import {
   Response,
 } from "../models";
 
-interface GoProps {
+interface CarryProps {
   done: (resp: Response) => void,
   error: (error: Error) => void,
 }
 
-export function Go(props: GoProps) {
+export function Carry(props: CarryProps) {
   const [selectedMethod, setSelected] = React.useState(new Set<Key>([Methods[0].name]) || "all");
   const method = React.useMemo(
     () => Array.from(selectedMethod).join(", ").replaceAll("_", " "),
@@ -78,7 +78,7 @@ export function Go(props: GoProps) {
               auto
               onPress={() => send()}
             >
-              Go!
+              Carry
             </Button>
           </Grid>
         </Grid.Container>

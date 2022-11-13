@@ -14,7 +14,7 @@ import {
   Protocol,
   Response,
 } from "../models";
-import { Go } from "../components";
+import { Carry } from "../components";
 
 function App() {
   const [selectedMethod, setSelected] = React.useState(new Set<Key>([Methods[0].name]) || "all");
@@ -40,7 +40,7 @@ function App() {
     <div>
       <Container>
         <Spacer />
-        <Go done={(resp) => setText(resp.body)} error={(error) => setText(error.message)} />
+        <Carry done={(resp) => setText(resp.body)} error={(error) => setText(error.message)} />
         <Spacer />
         <Row>
           <Card>
