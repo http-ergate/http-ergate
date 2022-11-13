@@ -1,75 +1,84 @@
-import { useState } from "react";
+import { Key, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import Image from "next/image";
-import reactLogo from "../assets/react.svg";
-import tauriLogo from "../assets/tauri.svg";
-import nextLogo from "../assets/next.svg";
+import { Button, Card, Col, Container, Dropdown, Grid, Input, Row, Spacer, Switch, Text } from "@nextui-org/react";
+import React from "react";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [selectedMethod, setSelected] = React.useState(new Set<Key>(["GET"]) || "all");
+  const method = React.useMemo(
+    () => Array.from(selectedMethod).join(", ").replaceAll("_", " "),
+    [selectedMethod]
+  );
+  const [protocol, _] = useState("http://");
+  const [url, setUrl] = useState("");
+  const [response, setResponse] = useState("");
 
-  async function greet() {
+  async function send() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+    try {
+      const resp = await invoke("send", { method: method, url: `${protocol}${url}` });
+      setResponse(JSON.stringify(resp));
+    } catch (e) {
+      setResponse(JSON.stringify(e));
+    }
   }
 
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div className="row">
-        <span className="logos">
-          <a href="https://nextjs.org" target="_blank">
-            <Image
-              width={144}
-              height={144}
-              src={nextLogo}
-              className="logo next"
-              alt="Next logo"
-            />
-          </a>
-        </span>
-        <span className="logos">
-          <a href="https://tauri.app" target="_blank">
-            <Image
-              width={144}
-              height={144}
-              src={tauriLogo}
-              className="logo tauri"
-              alt="Tauri logo"
-            />
-          </a>
-        </span>
-        <span className="logos">
-          <a href="https://reactjs.org" target="_blank">
-            <Image
-              width={144}
-              height={144}
-              src={reactLogo}
-              className="logo react"
-              alt="React logo"
-            />
-          </a>
-        </span>
-      </div>
-
-      <p>Click on the Tauri, Next, and React logos to learn more.</p>
-
-      <div className="row">
-        <div>
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
-          />
-          <button type="button" onClick={() => greet()}>
-            Greet
-          </button>
-        </div>
-      </div>
-
-      <p>{greetMsg}</p>
+    <div>
+      <Container>
+        <Spacer />
+        <Row fluid>
+          <Grid.Container gap={1} justify="flex-start">
+            <Grid>
+              <Dropdown>
+                <Dropdown.Button shadow css={{ tt: "capitalize" }}>
+                  {method}
+                </Dropdown.Button>
+                <Dropdown.Menu
+                  aria-label="method selection"
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={selectedMethod}
+                  onSelectionChange={setSelected}
+                >
+                  <Dropdown.Item key="GET">GET</Dropdown.Item>
+                  <Dropdown.Item key="POST">POST</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Grid>
+            <Grid xs>
+              <Input
+                bordered
+                shadow
+                fullWidth
+                labelLeft={protocol}
+                onChange={(ev) => setUrl(ev.currentTarget.value)}
+              />
+            </Grid>
+            <Grid>
+              <Button
+                shadow
+                auto
+                onPress={() => send()}
+              >
+                Send
+              </Button>
+            </Grid>
+          </Grid.Container>
+        </Row>
+        <Spacer />
+        <Row>
+          <Card css={{ $$cardColor: '$colors$secondary' }}>
+            <Card.Body>
+              <Row justify="center" align="center">
+                <Text h6 size={15} color="white" css={{ m: 0 }}>
+                  {response}
+                </Text>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Row>
+      </Container>
     </div>
   );
 }
