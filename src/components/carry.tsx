@@ -33,56 +33,56 @@ export function Carry(props: CarryProps) {
   }
 
   return (
-    <Container>
-      <Row fluid>
-        <Grid.Container gap={1} justify="flex-start">
-          <Grid>
-            <Dropdown>
-              <Dropdown.Button
-                color="secondary"
-                shadow
-                css={{ tt: "capitalize" }}
+    <Grid.Container gap={1} justify="flex-start">
+      {/* method dropdown */}
+      <Grid>
+        <Dropdown>
+          <Dropdown.Button
+            color="secondary"
+            shadow
+            css={{ tt: "capitalize" }}
+          >
+            {method}
+          </Dropdown.Button>
+          <Dropdown.Menu
+            aria-label="method selection"
+            disallowEmptySelection
+            selectionMode="single"
+            selectedKeys={selectedMethod}
+            onSelectionChange={setSelected}
+            items={Methods}
+          >
+            {(item: Method) => (
+              <Dropdown.Item
+                key={item.name}
               >
-                {method}
-              </Dropdown.Button>
-              <Dropdown.Menu
-                aria-label="method selection"
-                disallowEmptySelection
-                selectionMode="single"
-                selectedKeys={selectedMethod}
-                onSelectionChange={setSelected}
-                items={Methods}
-              >
-                {(item: Method) => (
-                  <Dropdown.Item
-                    key={item.name}
-                  >
-                    {item.name}
-                  </Dropdown.Item>
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Grid>
-          <Grid xs>
-            <Input
-              bordered
-              shadow
-              fullWidth
-              labelLeft={protocol}
-              onChange={(ev) => setUrl(ev.currentTarget.value)}
-            />
-          </Grid>
-          <Grid>
-            <Button
-              shadow
-              auto
-              onPress={() => send()}
-            >
-              Carry
-            </Button>
-          </Grid>
-        </Grid.Container>
-      </Row>
-    </Container>
+                {item.name}
+              </Dropdown.Item>
+            )}
+          </Dropdown.Menu>
+        </Dropdown>
+      </Grid>
+      {/* url input */}
+      <Grid xs>
+        <Input
+          bordered
+          shadow
+          fullWidth
+          color="primary"
+          labelLeft={protocol}
+          onChange={(ev) => setUrl(ev.currentTarget.value)}
+        />
+      </Grid>
+      {/* button */}
+      <Grid>
+        <Button
+          shadow
+          auto
+          onPress={() => send()}
+        >
+          Carry
+        </Button>
+      </Grid>
+    </Grid.Container>
   );
 };

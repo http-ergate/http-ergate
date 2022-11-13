@@ -40,7 +40,10 @@ function App() {
     <div>
       <Container>
         <Spacer />
-        <Carry done={(resp) => setText(resp.body)} error={(error) => setText(error.message)} />
+        <Carry 
+          done={(resp) => setText(resp.body)} 
+          error={(error) => setText(error.message)} 
+        />
         <Spacer />
         <Row>
           <Card>
