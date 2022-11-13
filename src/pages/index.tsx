@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, Container, Row, Spacer, Text } from "@nextui-org/react";
 import React from "react";
-import { Carry } from "../components";
+import { Food } from "../components";
 
 function App() {
   const [text, setText] = useState("");
@@ -10,7 +10,7 @@ function App() {
     <div>
       <Container>
         <Spacer />
-        <Carry 
+        <Food 
           delivered={(reward) => setText(reward.body)} 
           uncarriable={(message) => setText(message)} 
         />

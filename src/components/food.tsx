@@ -1,25 +1,52 @@
 import { Button, Dropdown, Grid, Input } from "@nextui-org/react";
 import React, { Key, useState } from "react";
-import { carry, Reward } from "../commands";
-import { Method, Methods, Protocol } from "../models";
+import { carry, FoodInfo, Reward } from "../commands";
+import { Method, Methods } from "../models";
 
-interface CarryProps {
+/**
+ * path type
+ */
+enum PathType {
+  normal = "http://",
+  secured = "https://",
+}
+
+/**
+ * food props
+ */
+interface FoodProps {
+  /**
+   * food delivered
+   */
   delivered: (reward: Reward) => void,
+
+  /**
+   * food is uncarriable
+   */
   uncarriable: (message: string) => void,
 }
 
-export function Carry(props: CarryProps) {
-  const [selectedMethod, setSelected] = React.useState(new Set<Key>([Methods[0].name]) || "all");
+/**
+ * food to carry
+ * @param props props
+ * @returns element
+ */
+export function Food(props: FoodProps) {
+  const [selectedMethod, setSelectedMethod] = React.useState(new Set<Key>([Methods[0].name]) || "all");
   const method = React.useMemo(
     () => Array.from(selectedMethod).join(", ").replaceAll("_", " "),
     [selectedMethod]
   );
-  const [protocol, _] = useState(Protocol.http);
-  const [url, setUrl] = useState("");
+  const [pathType, _] = useState(PathType.normal);
+  const [path, setPath] = useState("");
 
   async function send() {
     try {
-      const reward = await carry(method, `${protocol}${url}`);
+      const fi = {
+        method,
+        path: `${pathType}${path}`,
+      } as FoodInfo;
+      const reward = await carry(fi);
       props.delivered(reward);
     } catch (error) {
       props.uncarriable((error as Error).message);
@@ -43,7 +70,7 @@ export function Carry(props: CarryProps) {
             disallowEmptySelection
             selectionMode="single"
             selectedKeys={selectedMethod}
-            onSelectionChange={setSelected}
+            onSelectionChange={setSelectedMethod}
             items={Methods}
           >
             {(item: Method) => (
@@ -56,7 +83,7 @@ export function Carry(props: CarryProps) {
           </Dropdown.Menu>
         </Dropdown>
       </Grid>
-      {/* url input */}
+      {/* path input */}
       <Grid xs>
         <Input
           bordered
@@ -64,8 +91,8 @@ export function Carry(props: CarryProps) {
           fullWidth
           color="primary"
           animated={false}
-          labelLeft={protocol}
-          onChange={(ev) => setUrl(ev.currentTarget.value)}
+          labelLeft={pathType}
+          onChange={(ev) => setPath(ev.currentTarget.value)}
         />
       </Grid>
       {/* button */}
@@ -80,4 +107,4 @@ export function Carry(props: CarryProps) {
       </Grid>
     </Grid.Container>
   );
-};
+}

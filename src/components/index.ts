@@ -1,1 +1,1 @@
-export * from "./carry";
+export * from "./food";
