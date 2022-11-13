@@ -33,7 +33,7 @@ export function Carry(props: CarryProps) {
   }
 
   return (
-    <Grid.Container gap={1} justify="flex-start">
+    <Grid.Container gap={0.5} justify="flex-start">
       {/* method dropdown */}
       <Grid>
         <Dropdown>
@@ -69,6 +69,7 @@ export function Carry(props: CarryProps) {
           shadow
           fullWidth
           color="primary"
+          animated={false}
           labelLeft={protocol}
           onChange={(ev) => setUrl(ev.currentTarget.value)}
         />
