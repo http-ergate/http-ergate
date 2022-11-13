@@ -1,17 +1,11 @@
-import { Button, Container, Dropdown, Grid, Input, Row } from "@nextui-org/react";
-import { invoke } from "@tauri-apps/api/tauri";
+import { Button, Dropdown, Grid, Input } from "@nextui-org/react";
 import React, { Key, useState } from "react";
-import {
-  Error,
-  Method,
-  Methods,
-  Protocol,
-  Response,
-} from "../models";
+import { carry, Reward } from "../commands";
+import { Method, Methods, Protocol } from "../models";
 
 interface CarryProps {
-  done: (resp: Response) => void,
-  error: (error: Error) => void,
+  delivered: (reward: Reward) => void,
+  uncarriable: (message: string) => void,
 }
 
 export function Carry(props: CarryProps) {
@@ -25,10 +19,10 @@ export function Carry(props: CarryProps) {
 
   async function send() {
     try {
-      const response = await invoke<Response>("send", { method: method, url: `${protocol}${url}` });
-      props.done(response);
+      const reward = await carry(method, `${protocol}${url}`);
+      props.delivered(reward);
     } catch (error) {
-      props.error(error as Error);
+      props.uncarriable((error as Error).message);
     }
   }
 
