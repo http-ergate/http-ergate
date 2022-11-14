@@ -1,5 +1,5 @@
-import { Button, Dropdown, Grid, Input } from "@nextui-org/react";
-import React, { Key, useState } from "react";
+import { Button, Grid, Input } from "@nextui-org/react";
+import React, { useState } from "react";
 import { carry, FoodInfo, Reward } from "../commands";
 import { CarryMethod, CarryMethodType } from ".";
 
