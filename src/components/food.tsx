@@ -1,7 +1,7 @@
 import { Button, Dropdown, Grid, Input } from "@nextui-org/react";
 import React, { Key, useState } from "react";
 import { carry, FoodInfo, Reward } from "../commands";
-import { Method } from ".";
+import { CarryMethod, CarryMethodType } from ".";
 
 /**
  * path type
@@ -53,8 +53,8 @@ export function Food(props: FoodProps) {
     <Grid.Container gap={0.5} justify="flex-start">
       {/* method dropdown */}
       <Grid>
-        <Method
-          methodChanged={(m) => setMethod(m.name)}
+        <CarryMethod
+          methodChanged={(type) => setMethod(CarryMethodType[type])}
         />
       </Grid>
       {/* path input */}

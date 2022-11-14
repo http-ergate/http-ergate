@@ -1,2 +1,2 @@
 export * from "./food";
-export * from "./method";
+export * from "./carry-method";
