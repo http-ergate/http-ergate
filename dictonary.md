@@ -13,3 +13,4 @@ This is a dictionary for special vocabularies in http ergate project.
 | path        | Url, it's the where to carry food to home.                                                                       |
 | food        | Http request object, including method, url, headers, body and else, like the food ergate wants to carry to home. |
 | path type   | Http protocol, normal means http, secured means https.                                                           |
+| obstacle    | Http request error object, like something blocked ergate carrying food to home.                                  |

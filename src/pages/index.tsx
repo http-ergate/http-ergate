@@ -12,7 +12,7 @@ function App() {
         <Spacer />
         <Food 
           delivered={(reward) => setText(reward.body)} 
-          uncarriable={(message) => setText(message)} 
+          uncarriable={(reason) => setText(reason)} 
         />
         <Spacer />
         <Row>

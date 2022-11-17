@@ -3,25 +3,33 @@ use std::collections::HashMap;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
+/// `Obstacle`, aka error.
 #[derive(Serialize, Deserialize)]
-pub struct Error {
+pub struct Obstacle {
+    /// Obstacle reason
     message: String,
 }
 
-impl Error {
+impl Obstacle {
+    /// Constructs a new `Obstacle` with reason.
     fn new(message: String) -> Self {
         Self { message }
     }
 }
 
+/// `Reward`, aka http response.
 #[derive(Serialize, Deserialize)]
-pub struct Response {
+pub struct Reward {
+    /// Status code.
     status_code: u16,
+    /// Headers.
     headers: HashMap<String, String>,
+    /// Body content.
     body: String,
 }
 
-impl Response {
+impl Reward {
+    /// Constructs a new `Reward` with required fields.
     pub fn new(status_code: u16, headers: HashMap<String, String>, body: String) -> Self {
         Self {
             status_code,
@@ -31,28 +39,31 @@ impl Response {
     }
 }
 
-struct Request {
+/// `Food`, aka http request.
+#[derive(Serialize, Deserialize)]
+pub struct Food {
+    /// Http method.
     method: String,
-    url: String,
+    /// Url.
+    path: String,
 }
 
-impl Request {
-    fn new(method: String, url: String) -> Self {
-        Self { method, url }
-    }
-
-    async fn send(&self) -> Result<Response, Error> {
+impl Food {
+    /// Carry food to home with earned reward, returning a future Response.
+    /// # Obstacle
+    /// This method fails if there was an obstacle while carrying to home.
+    async fn carry(&self) -> Result<Reward, Obstacle> {
         // get reqwest client
         let client = reqwest::Client::new();
 
         // get reqwest method
         let method = match Method::from_bytes(self.method.as_bytes()) {
             Ok(method) => method,
-            Err(_) => return Err(Error::new(format!("Invalid method '{}'.", self.method))),
+            Err(_) => return Err(Obstacle::new(format!("Invalid method '{}'.", self.method))),
         };
 
         // send request
-        let resp_result = client.request(method, &self.url[..]).send().await;
+        let resp_result = client.request(method, &self.path[..]).send().await;
 
         match resp_result {
             // no error
@@ -73,15 +84,20 @@ impl Request {
                 };
 
                 // return response
-                Ok(Response::new(status_code, headers, body))
+                Ok(Reward::new(status_code, headers, body))
             }
             // an error occurred, return error
-            Err(error) => Err(Error::new(error.to_string())),
+            Err(error) => Err(Obstacle::new(error.to_string())),
         }
     }
 }
 
+/// # Command
+/// Carry food to home with earned reward,
+/// aka send a http request to specified destination with returned http response.
+/// # Obstacle
+/// This method fails if there was an obstacle while carrying to home.
 #[tauri::command]
-pub async fn send(method: String, url: String) -> Result<Response, Error> {
-    Request::new(method, url).send().await
+pub async fn carry(food: Food) -> Result<Reward, Obstacle> {
+    food.carry().await
 }

@@ -1,6 +1,6 @@
 import { Button, Grid, Input } from "@nextui-org/react";
 import React, { useState } from "react";
-import { carry, FoodInfo, Reward } from "../commands";
+import { carry, Food, Reward } from "../commands";
 import { CarryMethod, CarryMethodType } from ".";
 
 /**
@@ -23,7 +23,7 @@ interface FoodProps {
   /**
    * food is uncarriable
    */
-  uncarriable: (message: string) => void,
+  uncarriable: (reason: string) => void,
 }
 
 /**
@@ -38,11 +38,11 @@ export function Food(props: FoodProps) {
 
   async function send() {
     try {
-      const fi = {
+      const food = {
         method,
         path: `${pathType}${path}`,
-      } as FoodInfo;
-      const reward = await carry(fi);
+      } as Food;
+      const reward = await carry(food);
       props.delivered(reward);
     } catch (error) {
       props.uncarriable((error as Error).message);

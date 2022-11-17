@@ -1,9 +1,9 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
 /**
- * food information
+ * food
  */
-export interface FoodInfo {
+export interface Food {
     /**
      * method to carry
      */
@@ -25,21 +25,21 @@ export interface Reward {
 }
 
 /**
- * uncarriable error
+ * obstacle, aka an error
  */
-interface Uncarriable {
+interface Obstacle {
     message: string,
 }
 
 /**
  * carry food
- * @param fi food info
+ * @param food food
  * @returns reward
  */
-export async function carry(fi: FoodInfo): Promise<Reward> {
+export async function carry(food: Food): Promise<Reward> {
     try {
-        return await invoke<Reward>("send", { method: fi.method, url: fi.path });
+        return await invoke<Reward>("carry", { food: food });
     } catch (error) {
-        throw new Error((error as Uncarriable).message);
+        throw new Error((error as Obstacle).message);
     }
 }
