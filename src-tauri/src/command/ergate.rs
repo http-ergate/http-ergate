@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use reqwest::Method;
+use reqwest::{header::HeaderMap, Method};
 use serde::{Deserialize, Serialize};
 
 /// `Obstacle`, aka error.
@@ -39,6 +39,15 @@ impl Reward {
     }
 }
 
+/// `FoodAddition`, addition information for food.
+#[derive(Serialize, Deserialize)]
+pub struct FoodAddition {
+    /// Headers.
+    senses: HashMap<String, String>,
+    /// Inside.
+    inside: String,
+}
+
 /// `Food`, aka http request.
 #[derive(Serialize, Deserialize)]
 pub struct Food {
@@ -46,6 +55,8 @@ pub struct Food {
     method: String,
     /// Url.
     path: String,
+    /// Additional information.
+    addition: FoodAddition,
 }
 
 impl Food {
@@ -62,8 +73,20 @@ impl Food {
             Err(_) => return Err(Obstacle::new(format!("Invalid method '{}'.", self.method))),
         };
 
+        // build request
+        // get headers
+        let headers = self
+            .addition
+            .senses
+            .clone()
+            .into_iter()
+            .map(|(name, value)| Ok((name.parse()?, value.parse()?)))
+            .collect::<Result<HeaderMap, http::Error>>()
+            .unwrap_or(HeaderMap::new());
+        let rb = client.request(method, &self.path[..]).headers(headers);
+
         // send request
-        let resp_result = client.request(method, &self.path[..]).send().await;
+        let resp_result = rb.send().await;
 
         match resp_result {
             // no error

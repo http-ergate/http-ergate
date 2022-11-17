@@ -1,6 +1,21 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
 /**
+ * food addition
+ */
+export interface FoodAddition {
+    /**
+     * food smell, color and other things you can feel
+     */
+    senses: Record<string, string>,
+
+    /**
+     * things inside the food
+     */
+    inside: string,
+}
+
+/**
  * food
  */
 export interface Food {
@@ -13,6 +28,11 @@ export interface Food {
      * path to carry
      */
     path: string,
+
+    /**
+     * addition information
+     */
+    addition: FoodAddition,
 }
 
 /**
@@ -20,7 +40,7 @@ export interface Food {
  */
 export interface Reward {
     status_code: string,
-    headers: Map<string, string>,
+    headers: Record<string, string>,
     body: string,
 }
 
