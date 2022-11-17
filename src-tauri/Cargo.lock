@@ -1102,6 +1102,7 @@ dependencies = [
 name = "http-ergate"
 version = "0.0.0"
 dependencies = [
+ "http",
  "reqwest",
  "serde",
  "serde_json",
