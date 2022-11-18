@@ -35,13 +35,31 @@ export interface Food {
     addition: FoodAddition,
 }
 
+export interface RewardDetail {
+    /**
+     * exteriors of reward
+     */
+    exteriors: Record<string, string>,
+
+    /**
+     * reward description
+     */
+    description: string,
+}
+
 /**
  * reward earned response
  */
 export interface Reward {
-    status_code: string,
-    headers: Record<string, string>,
-    body: string,
+    /**
+     * level of reward
+     */
+    level: string,
+ 
+    /**
+     * reward detail
+     */
+    detail: RewardDetail,
 }
 
 /**

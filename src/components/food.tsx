@@ -1,6 +1,6 @@
 import { Button, Grid, Input } from "@nextui-org/react";
 import React, { useState } from "react";
-import { carry, Food, Reward } from "../commands";
+import { carry, Food, FoodAddition, Reward } from "../commands";
 import { CarryMethod, CarryMethodType } from ".";
 
 /**
@@ -38,6 +38,7 @@ export function Food(props: FoodProps) {
 
   async function send() {
     try {
+      // TODO: pass addition for testing!
       const food = {
         method,
         path: `${pathType}${path}`,

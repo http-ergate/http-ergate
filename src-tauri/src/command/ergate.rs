@@ -17,24 +17,33 @@ impl Obstacle {
     }
 }
 
+/// `RewardDetail`, detail for reward.
+#[derive(Serialize, Deserialize)]
+pub struct RewardDetail {
+    /// Exteriors.
+    exteriors: HashMap<String, String>,
+    /// Description.
+    description: String,
+}
+
 /// `Reward`, aka http response.
 #[derive(Serialize, Deserialize)]
 pub struct Reward {
-    /// Status code.
-    status_code: u16,
-    /// Headers.
-    headers: HashMap<String, String>,
-    /// Body content.
-    body: String,
+    /// Level.
+    level: u16,
+    /// Detail.
+    detail: RewardDetail,
 }
 
 impl Reward {
     /// Constructs a new `Reward` with required fields.
-    pub fn new(status_code: u16, headers: HashMap<String, String>, body: String) -> Self {
+    pub fn new(level: u16, exteriors: HashMap<String, String>, description: String) -> Self {
         Self {
-            status_code,
-            headers,
-            body,
+            level,
+            detail: RewardDetail {
+                exteriors,
+                description,
+            },
         }
     }
 }
@@ -42,7 +51,7 @@ impl Reward {
 /// `FoodAddition`, addition information for food.
 #[derive(Serialize, Deserialize)]
 pub struct FoodAddition {
-    /// Headers.
+    /// Senses.
     senses: HashMap<String, String>,
     /// Inside.
     inside: String,

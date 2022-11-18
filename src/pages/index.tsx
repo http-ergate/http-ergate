@@ -11,7 +11,7 @@ function App() {
       <Container>
         <Spacer />
         <Food 
-          delivered={(reward) => setText(reward.body)} 
+          delivered={(reward) => setText(reward.detail.description)} 
           uncarriable={(reason) => setText(reason)} 
         />
         <Spacer />
