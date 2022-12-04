@@ -3,9 +3,9 @@ import { useState } from "react";
 import { DeleteIcon } from "../icons";
 
 /**
- * sense props
+ * sense item props
  */
-interface SenseProps {
+interface SenseItemProps {
     /**
      * sense changed
      */
@@ -18,11 +18,11 @@ interface SenseProps {
 }
 
 /**
- * sense of food
+ * sense item of food
  * @param props props
  * @returns 
  */
-export function Sense(props: SenseProps) {
+export function SenseItem(props: SenseItemProps) {
     const [key, setKey] = useState("");
     const [value, setValue] = useState("");
 
