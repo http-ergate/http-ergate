@@ -38,10 +38,13 @@ export function Food(props: FoodProps) {
 
   async function send() {
     try {
-      // TODO: pass addition for testing!
       const food = {
         method,
         path: `${pathType}${path}`,
+        addition: {
+          senses: {},
+          inside: "",
+        } as FoodAddition,
       } as Food;
       const reward = await carry(food);
       props.delivered(reward);
