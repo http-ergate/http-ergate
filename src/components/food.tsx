@@ -51,35 +51,37 @@ export function Food(props: FoodProps) {
   }
 
   return (
-    <Grid.Container gap={0.5} justify="flex-start">
-      {/* method dropdown */}
-      <Grid>
-        <CarryMethod
-          methodChanged={(type) => setMethod(CarryMethodType[type])}
-        />
-      </Grid>
-      {/* path input */}
-      <Grid xs>
-        <Input
-          bordered
-          shadow
-          fullWidth
-          color="primary"
-          animated={false}
-          labelLeft={pathType}
-          onChange={(ev) => setPath(ev.currentTarget.value)}
-        />
-      </Grid>
-      {/* button */}
-      <Grid>
-        <Button
-          shadow
-          auto
-          onPress={() => send()}
-        >
-          Carry
-        </Button>
-      </Grid>
-    </Grid.Container>
+    <>
+      <Grid.Container gap={0.5} justify="flex-start">
+        {/* method dropdown */}
+        <Grid>
+          <CarryMethod
+            methodChanged={(type) => setMethod(CarryMethodType[type])}
+          />
+        </Grid>
+        {/* path input */}
+        <Grid xs>
+          <Input
+            bordered
+            shadow
+            fullWidth
+            color="primary"
+            animated={false}
+            labelLeft={pathType}
+            onChange={(ev) => setPath(ev.currentTarget.value)}
+          />
+        </Grid>
+        {/* button */}
+        <Grid>
+          <Button
+            shadow
+            auto
+            onPress={() => send()}
+          >
+            Carry
+          </Button>
+        </Grid>
+      </Grid.Container>
+    </>
   );
 }
