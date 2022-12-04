@@ -16,10 +16,18 @@ interface Addition {
     isActive: boolean,
 }
 
+/**
+ * food addition props
+ */
 interface FoodAdditionProps {
 
 }
 
+/**
+ * food addition
+ * @param props props
+ * @returns 
+ */
 export function FoodAddition(props: FoodAdditionProps) {
     const [additions, setAdditions] = useState([
         {
